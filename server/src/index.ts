@@ -10,8 +10,8 @@ import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
 import session from 'express-session';
 import { createClient } from 'redis';
-import { MyContext } from './types';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import cors from 'cors';
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig);
@@ -22,6 +22,12 @@ const main = async () => {
   const RedisStore = require('connect-redis')(session);
   const redisClient = createClient({ legacyMode: true });
   redisClient.connect().catch(console.error);
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    })
+  );
 
   app.use(
     session({
@@ -56,7 +62,7 @@ const main = async () => {
         // options
       }),
     ],
-    context: ({ req, res }): MyContext => ({
+    context: ({ req, res }) => ({
       em: orm.em,
       req,
       res,
@@ -67,6 +73,7 @@ const main = async () => {
 
   apolloServer.applyMiddleware({
     app,
+    cors: false,
   });
 
   app.listen(4000, () => {
