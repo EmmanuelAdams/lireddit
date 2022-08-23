@@ -144,6 +144,7 @@ export class UserResolver {
     // this will set a cookie on the user
     // keep them logged in
     req.session.userId = user.id;
+    // incase of cannot find userId, add userId in ctrl + session
 
     return { user };
   }
