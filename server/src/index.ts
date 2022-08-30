@@ -21,13 +21,13 @@ const main = async () => {
 
   const RedisStore = require('connect-redis')(session);
   const redisClient = createClient({ legacyMode: true });
-  redisClient.connect().catch(console.error);
-  app.use(
-    cors({
-      origin: 'http://localhost:3000',
-      credentials: true,
-    })
+  redisClient.on('connect', () =>
+    console.log('Connected to Redis!')
   );
+  redisClient.on('error', (err: Error) => {
+    return console.log('Redis Client Error', err);
+  });
+  redisClient.connect();
 
   app.use(
     session({
@@ -48,6 +48,12 @@ const main = async () => {
     })
   );
 
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    })
+  );
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
