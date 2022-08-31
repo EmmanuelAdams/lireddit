@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { MikroORM } from '@mikro-orm/core';
-import { __prod__ } from './constants';
+import { COOKIE_NAME, __prod__ } from './constants';
 import microConfig from './mikro-orm.config';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
@@ -12,6 +12,11 @@ import session from 'express-session';
 import { createClient } from 'redis';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import cors from 'cors';
+
+const corsOrigin = [
+  'https://studio.apollographql.com',
+  'http://localhost:3000',
+];
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig);
@@ -31,7 +36,7 @@ const main = async () => {
 
   app.use(
     session({
-      name: 'qid',
+      name: COOKIE_NAME,
       store: new RedisStore({
         client: redisClient,
         disableTouch: true,
@@ -50,7 +55,7 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: 'http://localhost:3000',
+      origin: corsOrigin,
       credentials: true,
     })
   );
