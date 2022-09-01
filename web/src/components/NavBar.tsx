@@ -36,7 +36,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       <Flex>
         <Box mr={2}>{data.me.username}</Box>
         <Button
-          // typedefs UseMutationState, make variable optional pending update
+          // typedefs UseMutationState, make variable
+          // optional pending update
           onClick={() => {
             logout();
           }}
