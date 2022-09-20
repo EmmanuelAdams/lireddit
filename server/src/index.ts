@@ -9,7 +9,8 @@ import { HelloResolver } from './resolvers/hello';
 import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
 import session from 'express-session';
-import { createClient } from 'redis';
+import Redis from 'ioredis';
+import connectRedis from 'connect-redis';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import cors from 'cors';
 
@@ -24,21 +25,20 @@ const main = async () => {
 
   const app = express();
 
-  const RedisStore = require('connect-redis')(session);
-  const redisClient = createClient({ legacyMode: true });
-  redisClient.on('connect', () =>
+  const RedisStore = connectRedis(session);
+  const redis = new Redis();
+  redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
-  redisClient.on('error', (err: Error) => {
+  redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  redisClient.connect();
 
   app.use(
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
         disableTouch: true,
       }),
       cookie: {
@@ -77,6 +77,7 @@ const main = async () => {
       em: orm.em,
       req,
       res,
+      redis,
     }),
   });
 

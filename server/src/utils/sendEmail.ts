@@ -2,34 +2,33 @@ import nodemailer from 'nodemailer';
 
 // async..await is not allowed in global scope, must use a wrapper
 export async function sendEmail(to: string, html: string) {
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
-  // let testAccount = await nodemailer.createTestAccount();
-  // console.log('testAccount: ', testAccount);
-
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    service: 'FastMail',
     auth: {
-      user: 'vx4ybk7nuqmxbz44@ethereal.email', // generated ethereal user
-      pass: 'Bv8VjwmjNmRjHc7Qjd', // generated ethereal password
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
     },
+  });
+
+  // verify connection configuration
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else if (success) {
+      console.log('Server is ready to take our messages');
+    }
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    from: process.env.EMAIL, // sender address
     to: to, // list of receivers
     subject: 'Change password', // Subject line
     html,
   });
 
-  console.log('Message sent: %s', info.messageId);
+  console.log(info);
 
-  console.log(
-    'Preview URL: %s',
-    nodemailer.getTestMessageUrl(info)
-  );
+  console.log('Message sent: %s', info.messageId);
 }
