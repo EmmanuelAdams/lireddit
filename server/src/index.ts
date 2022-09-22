@@ -1,7 +1,5 @@
 import 'reflect-metadata';
-import { MikroORM } from '@mikro-orm/core';
 import { COOKIE_NAME, __prod__ } from './constants';
-import microConfig from './mikro-orm.config';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
@@ -13,6 +11,9 @@ import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import cors from 'cors';
+import { createConnection } from 'typeorm';
+import { Post } from './entities/Post';
+import { User } from './entities/User';
 
 const corsOrigin = [
   'https://studio.apollographql.com',
@@ -20,8 +21,15 @@ const corsOrigin = [
 ];
 
 const main = async () => {
-  const orm = await MikroORM.init(microConfig);
-  await orm.getMigrator().up();
+  await createConnection({
+    type: 'postgres',
+    database: 'lireddit2',
+    username: 'postgres',
+    password: 'emmanuel2001',
+    logging: true,
+    synchronize: true,
+    entities: [Post, User],
+  });
 
   const app = express();
 
@@ -74,7 +82,6 @@ const main = async () => {
       }),
     ],
     context: ({ req, res }) => ({
-      em: orm.em,
       req,
       res,
       redis,
