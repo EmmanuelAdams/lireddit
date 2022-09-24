@@ -79,6 +79,9 @@ const main = async () => {
     plugins: [
       ApolloServerPluginLandingPageGraphQLPlayground({
         // options
+        settings: {
+          'request.credentials': 'include',
+        },
       }),
     ],
     context: ({ req, res }) => ({
