@@ -27,8 +27,12 @@ export const Login: React.FC<{}> = ({}) => {
               toErrorMap(response.data.login.errors)
             );
           } else if (response.data?.login.user) {
-            // worked
-            router.push('/');
+            if (typeof router.query.next === 'string') {
+              router.push(router.query.next);
+            } else {
+              // worked
+              router.push('/');
+            }
           }
         }}>
         {({ isSubmitting }) => (

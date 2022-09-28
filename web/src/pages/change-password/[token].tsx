@@ -13,7 +13,7 @@ import NextLink from 'next/link';
 
 export const ChangePassword: NextPage<{
   token: string;
-}> = ({ token }) => {
+}> = () => {
   const router = useRouter();
   const [, changePassword] = useChangePasswordMutation();
   const [tokenError, setTokenError] = useState('');
@@ -24,7 +24,10 @@ export const ChangePassword: NextPage<{
         onSubmit={async (values, { setErrors }) => {
           const response = await changePassword({
             newPassword: values.newPassword,
-            token,
+            token:
+              typeof router.query.token === 'string'
+                ? router.query.token
+                : '',
           });
           if (response.data?.changePassword.errors) {
             const errorMap = toErrorMap(
@@ -69,12 +72,6 @@ export const ChangePassword: NextPage<{
       </Formik>
     </Wrapper>
   );
-};
-
-ChangePassword.getInitialProps = ({ query }) => {
-  return {
-    token: query.token as string,
-  };
 };
 
 export default withUrqlClient(createUrqlClient)(
