@@ -28,12 +28,13 @@ const cors_1 = __importDefault(require("cors"));
 const typeorm_1 = require("typeorm");
 const Post_1 = require("./entities/Post");
 const User_1 = require("./entities/User");
+const path_1 = __importDefault(require("path"));
 const corsOrigin = [
     'https://studio.apollographql.com',
     'http://localhost:3000',
 ];
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, typeorm_1.createConnection)({
+    const conn = yield (0, typeorm_1.createConnection)({
         type: 'postgres',
         database: 'lireddit2',
         username: 'postgres',
@@ -41,7 +42,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         logging: true,
         synchronize: true,
         entities: [Post_1.Post, User_1.User],
+        migrations: [path_1.default.join(__dirname, './migrations/*')],
     });
+    yield conn.runMigrations();
     const app = (0, express_1.default)();
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
     const redis = new ioredis_1.default();
@@ -79,7 +82,11 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             validate: false,
         }),
         plugins: [
-            (0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)({}),
+            (0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)({
+                settings: {
+                    'request.credentials': 'include',
+                },
+            }),
         ],
         context: ({ req, res }) => ({
             req,

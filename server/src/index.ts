@@ -14,6 +14,7 @@ import cors from 'cors';
 import { createConnection } from 'typeorm';
 import { Post } from './entities/Post';
 import { User } from './entities/User';
+import path from 'path';
 
 const corsOrigin = [
   'https://studio.apollographql.com',
@@ -21,7 +22,7 @@ const corsOrigin = [
 ];
 
 const main = async () => {
-  await createConnection({
+  const conn = await createConnection({
     type: 'postgres',
     database: 'lireddit2',
     username: 'postgres',
@@ -29,7 +30,9 @@ const main = async () => {
     logging: true,
     synchronize: true,
     entities: [Post, User],
+    migrations: [path.join(__dirname, './migrations/*')],
   });
+  await conn.runMigrations();
 
   const app = express();
 
