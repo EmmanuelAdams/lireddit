@@ -1,2 +1,5 @@
 node_modules
 .env
+
+# To create a new migration use: 
+# typeorm migration:create <path>/<filename>
