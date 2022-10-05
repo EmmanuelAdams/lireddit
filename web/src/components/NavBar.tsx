@@ -18,10 +18,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   let body = null;
 
   // data is loading
-  if (isServer() || fetching) {
-  }
-  // user not logged in
-  else if (!data?.me) {
+  if (fetching || isServer()) {
+    // user not logged in
+  } else if (!data?.me) {
     body = (
       <>
         <NextLink href="/login">
