@@ -1,5 +1,11 @@
 import React from 'react';
-import { Box, Button, Flex, Link } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link,
+} from '@chakra-ui/react';
 import NextLink from 'next/link';
 import {
   useLogoutMutation,
@@ -57,7 +63,13 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       position="sticky"
       top={0}
       bg="teal"
-      p={4}>
+      p={4}
+      align="center">
+      <NextLink href="/">
+        <Link>
+          <Heading>LiReddit</Heading>
+        </Link>
+      </NextLink>
       <Box ml={'auto'}>{body}</Box>
     </Flex>
   );
