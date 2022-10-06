@@ -137,7 +137,7 @@ export const createUrqlClient = (
 ) => {
   let cookie = '';
   if (isServer()) {
-    cookie = Ctx.req.headers.cookie;
+    cookie = Ctx?.req?.headers?.cookie;
   }
 
   return {
