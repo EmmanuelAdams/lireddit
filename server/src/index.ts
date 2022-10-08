@@ -19,18 +19,19 @@ import path from 'path';
 import { Updoot } from './entities/Updoot';
 import { createUserLoader } from './utils/createUserLoader';
 import { createUpdootLoader } from './utils/createUpdootLoader';
-
+import * as dotenv from 'dotenv';
 const corsOrigin = [
   'https://studio.apollographql.com',
   'http://localhost:3000',
 ];
 
 const main = async () => {
+  dotenv.config();
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
     logging: true,
-    synchronize: true,
+    // synchronize: true,
     entities: [Post, User, Updoot],
     migrations: [path.join(__dirname, './migrations/*')],
   });
@@ -41,19 +42,18 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-
+  app.set('proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        url: process.env.REDIS_URL,
         client: redis,
         disableTouch: true,
       }),
