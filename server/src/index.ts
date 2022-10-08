@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import 'dotenv-safe/config';
 import { COOKIE_NAME, __prod__ } from './constants';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
@@ -27,9 +28,7 @@ const corsOrigin = [
 const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
-    database: 'lireddit2',
-    username: 'postgres',
-    password: 'emmanuel2001',
+    url: process.env.DATABASE_URL,
     logging: true,
     synchronize: true,
     entities: [Post, User, Updoot],
@@ -54,6 +53,7 @@ const main = async () => {
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
+        url: process.env.REDIS_URL,
         client: redis,
         disableTouch: true,
       }),
@@ -62,9 +62,10 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
+        domain: __prod__ ? '.netlify.app' : undefined,
       },
       saveUninitialized: false,
-      secret: 'qwerty',
+      secret: process.env.SESSION_SECRET,
       resave: false,
     })
   );
@@ -108,7 +109,7 @@ const main = async () => {
     cors: false,
   });
 
-  app.listen(4000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log('server started on localhost:4000');
   });
 };

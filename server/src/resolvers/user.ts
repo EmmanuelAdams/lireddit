@@ -15,6 +15,7 @@ import argon2 from 'argon2';
 import {
   COOKIE_NAME,
   FORGET_PASSWORD_PREFIX,
+  __prod__,
 } from '../constants';
 import { UsernamePasswordInput } from './UsernamePasswordInput';
 import { validateRegister } from '../utils/validateRegister';
@@ -134,7 +135,9 @@ export class UserResolver {
 
     await sendEmail(
       email,
-      `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
+      __prod__
+        ? `<a href="https://.netlify.app/change-password/${token}">reset password</a>`
+        : `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
     );
 
     return true;
