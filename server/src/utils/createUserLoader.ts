@@ -15,5 +15,8 @@ export const createUserLoader = () =>
       userIdToUser[u.id] = u;
     });
 
-    return userIds.map((userId) => userIdToUser[userId]);
+    const sortedUsers = userIds.map(
+      (userId) => userIdToUser[userId]
+    );
+    return sortedUsers;
   });

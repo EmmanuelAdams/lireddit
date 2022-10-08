@@ -56,7 +56,7 @@ export class PostResolver {
     @Root() post: Post,
     @Ctx() { updootLoader, req }: MyContext
   ) {
-    if (!req.session.id) {
+    if (!req.session.userId) {
       return null;
     }
 
@@ -133,9 +133,10 @@ export class PostResolver {
   async posts(
     @Arg('limit', () => Int) limit: number,
     @Arg('cursor', () => String, { nullable: true })
-    cursor: string | null
+    cursor: string | null,
+    @Ctx() {}: MyContext
   ): Promise<PaginatedPosts> {
-    const realLimit = Math.min(50, limit) + 1;
+    const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
 
     const replacements: any[] = [realLimitPlusOne];

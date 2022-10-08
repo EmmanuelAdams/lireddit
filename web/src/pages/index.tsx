@@ -8,15 +8,27 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
+import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import { useState } from 'react';
-import { EditDeletePostButtons } from '../components/EditDeletePostButtons';
 import { Layout } from '../components/Layout';
 import { UpdootSection } from '../components/UpdootSection';
 import { usePostsQuery } from '../generated/graphql';
 import { createUrqlClient } from '../utils/createUrqlClient';
+import { EditDeletePostButtons as EditDeleteProp } from '../components/EditDeletePostButtons';
 
 const Index = () => {
+  const EditDeletePostButtons = dynamic<
+    React.ComponentProps<typeof EditDeleteProp>
+  >(
+    () =>
+      import('../components/EditDeletePostButtons').then(
+        (mod) => mod.EditDeletePostButtons
+      ),
+    {
+      ssr: false,
+    }
+  );
   const [variables, setVariables] = useState({
     limit: 15,
     cursor: null as null | string,
@@ -66,7 +78,7 @@ const Index = () => {
                     <Text flex={1} mt={4}>
                       {p.textSnippet}
                     </Text>
-                    <Box ml="auto">
+                    <Box>
                       <EditDeletePostButtons
                         id={p.id}
                         creatorId={p.creator.id}
