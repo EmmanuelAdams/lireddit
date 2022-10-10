@@ -19,14 +19,12 @@ import path from 'path';
 import { Updoot } from './entities/Updoot';
 import { createUserLoader } from './utils/createUserLoader';
 import { createUpdootLoader } from './utils/createUpdootLoader';
-import * as dotenv from 'dotenv';
 const corsOrigin = [
   'https://studio.apollographql.com',
   'http://localhost:3000',
 ];
 
 const main = async () => {
-  dotenv.config();
   const conn = await createConnection({
     type: 'postgres',
     url: 'postgresql://postgres:emmanuel2001@localhost:5432/lireddit2',
@@ -111,7 +109,7 @@ const main = async () => {
     cors: false,
   });
 
-  app.listen(4000 || process.env.PORT, () => {
+  app.listen(4000, () => {
     console.log('server started on localhost:4000');
   });
 };
