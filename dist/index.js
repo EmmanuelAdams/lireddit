@@ -68,6 +68,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         password: process.env.DB_PASSWORD,
         database: process.env.DATABASE,
         port: process.env.DB_PORT,
+        host: process.env.DB_HOST,
         logging: true,
         entities: [Post_1.Post, User_1.User, Updoot_1.Updoot],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
@@ -92,7 +93,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             httpOnly: true,
             sameSite: 'lax',
             secure: constants_1.__prod__,
-            domain: constants_1.__prod__ ? '.netlify.app' : undefined,
         },
         saveUninitialized: false,
         secret: process.env.SESSION_SECRET,
@@ -131,8 +131,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app,
         cors: false,
     });
-    app.listen(process.env.PORT, () => {
-        console.log('server started on localhost:4000');
+    const PORT = process.env.PORT || 4000;
+    app.listen({ port: PORT }, () => {
+        console.log(`server started on localhost:${PORT}`);
     });
 });
 main();

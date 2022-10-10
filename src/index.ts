@@ -32,6 +32,7 @@ const main = async () => {
     password: process.env.DB_PASSWORD,
     database: process.env.DATABASE,
     port: process.env.DB_PORT as any,
+    host: process.env.DB_HOST,
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
@@ -46,7 +47,7 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL as string);
+  const redis = new Redis(process.env.REDIS_URL as any);
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
@@ -66,7 +67,6 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: __prod__ ? '.netlify.app' : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
@@ -113,8 +113,10 @@ const main = async () => {
     cors: false,
   });
 
-  app.listen(process.env.PORT, () => {
-    console.log('server started on localhost:4000');
+  const PORT = process.env.PORT || 4000;
+
+  app.listen({ port: PORT }, () => {
+    console.log(`server started on localhost:${PORT}`);
   });
 };
 
