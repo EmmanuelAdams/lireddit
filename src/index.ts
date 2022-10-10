@@ -27,7 +27,6 @@ const corsOrigin = [
 
 const main = async () => {
   dotenv.config();
-  require('dotenv-safe').config({ allowEmptyValues: true });
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
@@ -52,7 +51,7 @@ const main = async () => {
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('first proxy', 1);
+  app.set('proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,

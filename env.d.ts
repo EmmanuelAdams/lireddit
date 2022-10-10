@@ -1,7 +1,6 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      MIKRO_ORM_ALLOW_GLOBAL_CONTEXT: string;
       EMAIL: string;
       PASSWORD: string;
       DATABASE_URL: string;
@@ -12,4 +11,4 @@ declare global {
   }
 }
 
-export {}
+export {};
