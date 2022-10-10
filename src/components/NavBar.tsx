@@ -54,7 +54,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           // typedefs UseMutationState, make variable
           // optional pending update
           onClick={async () => {
-            await logout();
+            await logout({});
             router.reload();
           }}
           isLoading={logoutFetching}
