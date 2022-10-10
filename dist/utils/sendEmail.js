@@ -19,8 +19,8 @@ function sendEmail(to, html) {
         let transporter = nodemailer_1.default.createTransport({
             service: 'FastMail',
             auth: {
-                user: process.env.EMAIL,
-                pass: process.env.PASSWORD,
+                user: 'testingmyapp@fastmail.com',
+                pass: 'dqbyexd6zz52c42a',
             },
         });
         transporter.verify(function (error, success) {
@@ -32,7 +32,7 @@ function sendEmail(to, html) {
             }
         });
         let info = yield transporter.sendMail({
-            from: process.env.EMAIL,
+            from: 'testingmyapp@fastmail.com',
             to: to,
             subject: 'Change password',
             html,

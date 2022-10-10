@@ -6,8 +6,8 @@ export async function sendEmail(to: string, html: string) {
   let transporter = nodemailer.createTransport({
     service: 'FastMail',
     auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
+      user: 'testingmyapp@fastmail.com',
+      pass: 'dqbyexd6zz52c42a',
     },
   });
 
@@ -22,7 +22,7 @@ export async function sendEmail(to: string, html: string) {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: process.env.EMAIL, // sender address
+    from: 'testingmyapp@fastmail.com', // sender address
     to: to, // list of receivers
     subject: 'Change password', // Subject line
     html,
