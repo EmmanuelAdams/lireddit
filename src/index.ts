@@ -39,6 +39,8 @@ const main = async () => {
   await conn.runMigrations();
 
   // await Post.delete({});
+  // await User.delete({});
+  // await Updoot.delete({});
 
   const app = express();
 
