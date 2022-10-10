@@ -30,7 +30,7 @@ const main = async () => {
   require('dotenv-safe').config({ allowEmptyValues: true });
   const conn = await createConnection({
     type: 'postgres',
-    url: 'postgresql://postgres:emmanuel2001@localhost:5432/lireddit2',
+    url: process.env.DATABASE_URL,
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
@@ -43,14 +43,14 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis('127.0.0.1:6379');
+  const redis = new Redis(process.env.REDIS_URL as string);
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('proxy', 1);
+  app.set('first proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
@@ -66,7 +66,7 @@ const main = async () => {
         domain: __prod__ ? '.netlify.app' : undefined,
       },
       saveUninitialized: false,
-      secret: 'qwerty',
+      secret: process.env.SESSION_SECRET as string,
       resave: false,
     })
   );
@@ -110,7 +110,7 @@ const main = async () => {
     cors: false,
   });
 
-  app.listen(4000, () => {
+  app.listen(4000 || process.env.PORT, () => {
     console.log('server started on localhost:4000');
   });
 };

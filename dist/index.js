@@ -66,7 +66,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     require('dotenv-safe').config({ allowEmptyValues: true });
     const conn = yield (0, typeorm_1.createConnection)({
         type: 'postgres',
-        url: 'postgresql://postgres:emmanuel2001@localhost:5432/lireddit2',
+        url: process.env.DATABASE_URL,
         logging: true,
         entities: [Post_1.Post, User_1.User, Updoot_1.Updoot],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
@@ -74,12 +74,12 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield conn.runMigrations();
     const app = (0, express_1.default)();
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
-    const redis = new ioredis_1.default('127.0.0.1:6379');
+    const redis = new ioredis_1.default(process.env.REDIS_URL);
     redis.on('connect', () => console.log('Connected to Redis!'));
     redis.on('error', (err) => {
         return console.log('Redis Client Error', err);
     });
-    app.set('proxy', 1);
+    app.set('first proxy', 1);
     app.use((0, express_session_1.default)({
         name: constants_1.COOKIE_NAME,
         store: new RedisStore({
@@ -94,7 +94,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             domain: constants_1.__prod__ ? '.netlify.app' : undefined,
         },
         saveUninitialized: false,
-        secret: 'qwerty',
+        secret: process.env.SESSION_SECRET,
         resave: false,
     }));
     app.use((0, cors_1.default)({
@@ -130,7 +130,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app,
         cors: false,
     });
-    app.listen(4000, () => {
+    app.listen(4000 || process.env.PORT, () => {
         console.log('server started on localhost:4000');
     });
 });
