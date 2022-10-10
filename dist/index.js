@@ -63,6 +63,7 @@ const corsOrigin = [
 ];
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     dotenv.config();
+    require('dotenv-safe').config({ allowEmptyValues: true });
     const conn = yield (0, typeorm_1.createConnection)({
         type: 'postgres',
         url: process.env.DATABASE_URL,
