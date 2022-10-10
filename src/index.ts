@@ -29,7 +29,7 @@ const main = async () => {
   dotenv.config();
   const conn = await createConnection({
     type: 'postgres',
-    url: process.env.DATABASE_URL,
+    url: 'postgresql://postgres:emmanuel2001@localhost:5432/lireddit2',
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
@@ -44,7 +44,7 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL as string);
+  const redis = new Redis('127.0.0.1:6379');
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
@@ -67,7 +67,7 @@ const main = async () => {
         domain: __prod__ ? '.netlify.app' : undefined,
       },
       saveUninitialized: false,
-      secret: process.env.SESSION_SECRET as string,
+      secret: 'qwerty',
       resave: false,
     })
   );
