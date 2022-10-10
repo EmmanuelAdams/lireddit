@@ -28,7 +28,10 @@ const main = async () => {
   dotenv.config();
   const conn = await createConnection({
     type: 'postgres',
-    url: process.env.DATABASE_URL,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DATABASE,
+    port: process.env.DB_PORT as any,
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],

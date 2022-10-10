@@ -4,11 +4,11 @@ require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const AppDataSource = new typeorm_1.DataSource({
     type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: 'emmanuel2001',
-    database: 'lireddit3',
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    database: 'lireddit2',
+    port: process.env.DB_PORT,
     entities: ['dist/entities/*.js'],
     migrations: ['src/migration/**/*.ts'],
 });
