@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import 'dotenv-safe/config';
 import { COOKIE_NAME, __prod__ } from './constants';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
@@ -51,7 +50,7 @@ const main = async () => {
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('proxy', 1);
+  app.set('first proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
@@ -115,4 +114,5 @@ const main = async () => {
     console.log('server started on localhost:4000');
   });
 };
+
 main();
