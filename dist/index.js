@@ -67,8 +67,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DATABASE,
-        port: process.env.DB_PORT,
-        host: process.env.DB_HOST,
         logging: true,
         entities: [Post_1.Post, User_1.User, Updoot_1.Updoot],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
@@ -131,7 +129,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app,
         cors: false,
     });
-    const PORT = process.env.PORT || 4000;
+    const PORT = process.env.PORT || 5000;
     app.listen({ port: PORT }, () => {
         console.log(`server started on localhost:${PORT}`);
     });

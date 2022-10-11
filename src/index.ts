@@ -31,8 +31,6 @@ const main = async () => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DATABASE,
-    port: process.env.DB_PORT as any,
-    host: process.env.DB_HOST,
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
@@ -113,7 +111,7 @@ const main = async () => {
     cors: false,
   });
 
-  const PORT = process.env.PORT || 4000;
+  const PORT = process.env.PORT || 5000;
 
   app.listen({ port: PORT }, () => {
     console.log(`server started on localhost:${PORT}`);
