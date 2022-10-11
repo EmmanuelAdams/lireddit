@@ -34,6 +34,9 @@ const main = async () => {
     password:
       '35a7017a7f749655f3382eeb0d22703c9bc3f8987752fa0663ff541e17fe5fd0',
     host: 'ec2-44-209-24-62.compute-1.amazonaws.com',
+    ssl: {
+      rejectUnauthorized: false,
+    },
     port: 5432,
     logging: true,
     // synchronize: true,
