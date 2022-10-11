@@ -51,7 +51,10 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL, {
+  const redis = new Redis(process.env.REDIS_URL as any, {
+    password: process.env.REDIS_AUTH,
+    host: process.env.REDIS_HOST,
+    port: 6379,
     tls: {
       rejectUnauthorized: false,
     },
