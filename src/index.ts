@@ -29,11 +29,10 @@ const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    database: 'devivd7vpll1jb',
-    username: 'daysajzsxboyvc',
-    password:
-      '35a7017a7f749655f3382eeb0d22703c9bc3f8987752fa0663ff541e17fe5fd0',
-    host: 'ec2-44-209-24-62.compute-1.amazonaws.com',
+    database: process.env.DATABASE,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
     ssl: {
       rejectUnauthorized: false,
     },
