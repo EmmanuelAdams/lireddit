@@ -51,7 +51,14 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL as any);
+  const redis = new Redis();
+  if (process.env.REDIS_URL) {
+    process.env.REDIS_URL;
+    redis;
+  } else {
+    redis;
+  }
+
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
