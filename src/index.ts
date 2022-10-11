@@ -51,14 +51,13 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
-  if (process.env.REDIS_URL) {
-    process.env.REDIS_URL;
-    redis;
-  } else {
-    redis;
-  }
-
+  const redis = new Redis({
+    port: 6379,
+    host: '127.0.0.1',
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
