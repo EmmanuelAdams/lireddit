@@ -52,8 +52,6 @@ const main = async () => {
 
   const RedisStore = connectRedis(session);
   const redis = new Redis({
-    port: 6379,
-    host: '127.0.0.1',
     tls: {
       rejectUnauthorized: false,
     },
