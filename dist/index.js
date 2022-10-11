@@ -64,7 +64,12 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     dotenv.config();
     const conn = yield (0, typeorm_1.createConnection)({
         type: 'postgres',
-        url: process.env.DATABASE_URI,
+        url: process.env.DATABASE_URL,
+        database: 'devivd7vpll1jb',
+        username: 'daysajzsxboyvc',
+        password: '35a7017a7f749655f3382eeb0d22703c9bc3f8987752fa0663ff541e17fe5fd0',
+        host: 'ec2-44-209-24-62.compute-1.amazonaws.com',
+        port: 5432,
         logging: true,
         entities: [Post_1.Post, User_1.User, Updoot_1.Updoot],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
