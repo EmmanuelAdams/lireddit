@@ -51,9 +51,9 @@ const main = async () => {
     password: process.env.REDIS_AUTH,
     host: process.env.REDIS_HOST,
     port: 6379,
-    // tls: {
-    //   rejectUnauthorized: false,
-    // },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
   redis.on('connect', () =>
     console.log('Connected to Redis!')
