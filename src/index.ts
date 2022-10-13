@@ -28,7 +28,6 @@ const main = async () => {
     ssl: {
       rejectUnauthorized: false,
     },
-    port: 5432,
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
