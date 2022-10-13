@@ -25,6 +25,10 @@ const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+    port: 5432,
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
@@ -39,14 +43,18 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL as any);
+  const redis = new Redis(process.env.REDIS_URL as any, {
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('trust proxy', 1);
+  app.set('first proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
