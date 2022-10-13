@@ -65,7 +65,7 @@ const main = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 year
         httpOnly: true,
-        sameSite: 'lax', // csrf
+        sameSite: 'none', // csrf
         secure: __prod__, // cookie only works in https
         domain: '.herokuapp.com',
       },
