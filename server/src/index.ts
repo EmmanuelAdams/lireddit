@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import 'dotenv-safe/config';
 import { COOKIE_NAME, __prod__ } from './constants';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
@@ -30,6 +29,14 @@ const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
+    database: process.env.DATABASE,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+    port: 5432,
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
@@ -38,18 +45,27 @@ const main = async () => {
   await conn.runMigrations();
 
   // await Post.delete({});
+  // await User.delete({});
+  // await Updoot.delete({});
 
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL);
+  const redis = new Redis(process.env.REDIS_URL as any, {
+    password: process.env.REDIS_AUTH,
+    host: process.env.REDIS_HOST,
+    port: 6379,
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('proxy', 1);
+  app.set('first proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
@@ -62,10 +78,9 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: __prod__ ? '.netlify.app' : undefined,
       },
       saveUninitialized: false,
-      secret: process.env.SESSION_SECRET,
+      secret: process.env.SESSION_SECRET as string,
       resave: false,
     })
   );
@@ -109,8 +124,11 @@ const main = async () => {
     cors: false,
   });
 
-  app.listen(parseInt(process.env.PORT), () => {
-    console.log('server started on localhost:4000');
+  const PORT = process.env.PORT || 5000;
+
+  app.listen({ port: PORT }, () => {
+    console.log(`server started on localhost:${PORT}`);
   });
 };
+
 main();

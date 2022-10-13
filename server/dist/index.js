@@ -36,7 +36,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-require("dotenv-safe/config");
 const constants_1 = require("./constants");
 const express_1 = __importDefault(require("express"));
 const apollo_server_express_1 = require("apollo-server-express");
@@ -65,7 +64,12 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     dotenv.config();
     const conn = yield (0, typeorm_1.createConnection)({
         type: 'postgres',
-        url: process.env.DATABASE_URL,
+        database: process.env.DATABASE,
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST,
+        ssl: process.env.DATABASE_URL ? true : false,
+        port: 5432,
         logging: true,
         entities: [Post_1.Post, User_1.User, Updoot_1.Updoot],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
@@ -78,7 +82,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     redis.on('error', (err) => {
         return console.log('Redis Client Error', err);
     });
-    app.set('proxy', 1);
+    app.set('first proxy', 1);
     app.use((0, express_session_1.default)({
         name: constants_1.COOKIE_NAME,
         store: new RedisStore({
@@ -90,7 +94,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             httpOnly: true,
             sameSite: 'lax',
             secure: constants_1.__prod__,
-            domain: constants_1.__prod__ ? '.netlify.app' : undefined,
         },
         saveUninitialized: false,
         secret: process.env.SESSION_SECRET,
@@ -129,8 +132,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app,
         cors: false,
     });
-    app.listen(parseInt(process.env.PORT), () => {
-        console.log('server started on localhost:4000');
+    const PORT = process.env.PORT || 5000;
+    app.listen({ port: PORT }, () => {
+        console.log(`server started on localhost:${PORT}`);
     });
 });
 main();
