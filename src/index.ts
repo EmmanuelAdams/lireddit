@@ -54,7 +54,7 @@ const main = async () => {
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('first proxy', 1);
+  app.set('trust proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
