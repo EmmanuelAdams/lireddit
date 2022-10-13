@@ -19,10 +19,6 @@ import { Updoot } from './entities/Updoot';
 import { createUserLoader } from './utils/createUserLoader';
 import { createUpdootLoader } from './utils/createUpdootLoader';
 import * as dotenv from 'dotenv';
-const corsOrigin = [
-  'https://studio.apollographql.com',
-  'http://localhost:3000',
-];
 
 const main = async () => {
   dotenv.config();
@@ -33,9 +29,9 @@ const main = async () => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
-    ssl: {
-      rejectUnauthorized: false,
-    },
+    // ssl: {
+    //   rejectUnauthorized: false,
+    // },
     port: 5432,
     logging: true,
     // synchronize: true,
@@ -55,9 +51,9 @@ const main = async () => {
     password: process.env.REDIS_AUTH,
     host: process.env.REDIS_HOST,
     port: 6379,
-    tls: {
-      rejectUnauthorized: false,
-    },
+    // tls: {
+    //   rejectUnauthorized: false,
+    // },
   });
   redis.on('connect', () =>
     console.log('Connected to Redis!')
@@ -87,7 +83,7 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: corsOrigin,
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
