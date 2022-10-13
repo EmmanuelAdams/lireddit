@@ -120,10 +120,10 @@ const main = async () => {
     cors: false,
   });
 
-  const PORT = process.env.PORT || 5000;
+  // const PORT = process.env.PORT || 5000;
 
-  app.listen({ port: PORT }, () => {
-    console.log(`server started on localhost:${PORT}`);
+  app.listen(process.env.PORT, () => {
+    console.log(`server started on localhost:5000`);
   });
 };
 
