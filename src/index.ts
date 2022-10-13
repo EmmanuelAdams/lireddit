@@ -25,10 +25,6 @@ const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    database: process.env.DATABASE,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
     ssl: {
       rejectUnauthorized: false,
     },
@@ -47,14 +43,7 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL as any, {
-    password: process.env.REDIS_AUTH,
-    host: process.env.REDIS_HOST,
-    port: 6379,
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
+  const redis = new Redis(process.env.REDIS_URL as any);
   redis.on('connect', () =>
     console.log('Connected to Redis!')
   );
