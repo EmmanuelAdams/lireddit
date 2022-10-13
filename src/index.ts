@@ -25,9 +25,6 @@ const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
     logging: true,
     // synchronize: true,
     entities: [Post, User, Updoot],
@@ -49,7 +46,7 @@ const main = async () => {
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('first proxy', 1);
+  app.set('trust proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
