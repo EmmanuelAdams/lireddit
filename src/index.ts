@@ -67,6 +67,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
+        domain: '.herokuapp.com',
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
