@@ -29,9 +29,9 @@ const main = async () => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
-    // ssl: {
-    //   rejectUnauthorized: false,
-    // },
+    ssl: {
+      rejectUnauthorized: false,
+    },
     port: 5432,
     logging: true,
     // synchronize: true,
