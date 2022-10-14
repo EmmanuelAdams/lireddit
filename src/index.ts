@@ -21,7 +21,7 @@ import { createUpdootLoader } from './utils/createUpdootLoader';
 import * as dotenv from 'dotenv';
 
 const corsOrigin = [
-  'https://lireddit-serve.herokuapp.com/graphql',
+  'https://lireddit-serve.herokuapp.com',
   'https://studio.apollographql.com',
   'http://localhost:3000',
 ];
