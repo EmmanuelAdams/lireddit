@@ -65,9 +65,9 @@ const main = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 year
         httpOnly: true,
-        sameSite: 'none', // csrf
+        sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: '.herokuapp.com',
+        domain: '',
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
@@ -77,7 +77,9 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN,
+      origin:
+        process.env.CORS_ORIGIN ||
+        'https://lireddit-serve.herokuapp.com/graphql',
       credentials: true,
     })
   );
