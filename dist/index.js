@@ -56,11 +56,20 @@ const Updoot_1 = require("./entities/Updoot");
 const createUserLoader_1 = require("./utils/createUserLoader");
 const createUpdootLoader_1 = require("./utils/createUpdootLoader");
 const dotenv = __importStar(require("dotenv"));
+const corsOrigin = [
+    'https://lireddit-serve.herokuapp.com',
+    'https://studio.apollographql.com',
+    'http://localhost:3000',
+];
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     dotenv.config();
     const conn = yield (0, typeorm_1.createConnection)({
         type: 'postgres',
         url: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false,
+        },
+        port: 5432,
         logging: true,
         entities: [Post_1.Post, User_1.User, Updoot_1.Updoot],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
@@ -68,12 +77,16 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield conn.runMigrations();
     const app = (0, express_1.default)();
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
-    const redis = new ioredis_1.default(process.env.REDIS_URL);
+    const redis = new ioredis_1.default(process.env.REDIS_URL, {
+        tls: {
+            rejectUnauthorized: false,
+        },
+    });
     redis.on('connect', () => console.log('Connected to Redis!'));
     redis.on('error', (err) => {
         return console.log('Redis Client Error', err);
     });
-    app.set('first proxy', 1);
+    app.set('trust proxy', 1);
     app.use((0, express_session_1.default)({
         name: constants_1.COOKIE_NAME,
         store: new RedisStore({
@@ -91,7 +104,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         resave: false,
     }));
     app.use((0, cors_1.default)({
-        origin: process.env.CORS_ORIGIN,
+        origin: corsOrigin,
         credentials: true,
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({

@@ -21,6 +21,7 @@ import { createUpdootLoader } from './utils/createUpdootLoader';
 import * as dotenv from 'dotenv';
 
 const corsOrigin = [
+  process.env.CORS_ORIGIN,
   'https://lireddit-serve.herokuapp.com',
   'https://studio.apollographql.com',
   'http://localhost:3000',
@@ -82,7 +83,7 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: corsOrigin,
+      origin: corsOrigin as any,
       credentials: true,
     })
   );
