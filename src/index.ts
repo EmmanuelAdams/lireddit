@@ -27,7 +27,7 @@ const corsOptions = {
     : 'http://localhost:3000',
 };
 
-const corsDomain = ['.herokuapp.com' && '.netlify.app'];
+// const corsDomain = ['.herokuapp.com' && '.netlify.app'];
 
 // [
 //   process.env.CORS_ORIGIN,
@@ -84,7 +84,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: corsDomain as any,
+        domain: '.netlify.app',
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
