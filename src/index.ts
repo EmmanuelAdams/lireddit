@@ -73,7 +73,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: 'zippy-paprenjak-0ee49b.netlify.app',
+        domain: __prod__ ? '.netlify.app' : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
