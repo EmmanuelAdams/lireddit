@@ -20,6 +20,12 @@ import { createUserLoader } from './utils/createUserLoader';
 import { createUpdootLoader } from './utils/createUpdootLoader';
 import * as dotenv from 'dotenv';
 
+const corsOrigin = [
+  process.env.CORS_ORIGIN as string,
+  'https://lireddit-serve.herokuapp.com/graphql',
+  'https://studio.apollographql.com',
+];
+
 const main = async () => {
   dotenv.config();
   const conn = await createConnection({
@@ -77,9 +83,7 @@ const main = async () => {
 
   app.use(
     cors({
-      origin:
-        process.env.CORS_ORIGIN ||
-        'https://lireddit-serve.herokuapp.com/graphql',
+      origin: corsOrigin,
       credentials: true,
     })
   );
