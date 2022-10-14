@@ -27,6 +27,8 @@ const corsOptions = {
     : 'http://localhost:3000',
 };
 
+const corsDomain = ['herokuapp.com', 'netlify.app'];
+
 // [
 //   process.env.CORS_ORIGIN,
 //   'https://lireddit-serve.herokuapp.com',
@@ -82,6 +84,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
+        domain: corsDomain as any,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
