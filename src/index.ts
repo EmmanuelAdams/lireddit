@@ -84,7 +84,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: '.netlify.app',
+        domain: ['.herokuapp.com', '.netlify.app'] as any,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
