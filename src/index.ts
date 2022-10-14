@@ -27,7 +27,7 @@ const corsOptions = {
     : 'http://localhost:3000',
 };
 
-const corsDomain = ['.herokuapp.com', '.netlify.app'];
+const corsDomain = ['.herokuapp.com' && '.netlify.app'];
 
 // [
 //   process.env.CORS_ORIGIN,
