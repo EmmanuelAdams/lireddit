@@ -20,12 +20,19 @@ import { createUserLoader } from './utils/createUserLoader';
 import { createUpdootLoader } from './utils/createUpdootLoader';
 import * as dotenv from 'dotenv';
 
-const corsOrigin = [
-  process.env.CORS_ORIGIN,
-  'https://lireddit-serve.herokuapp.com',
-  'https://studio.apollographql.com',
-  'http://localhost:3000',
-];
+const corsOptions = {
+  credentials: true,
+  origin: __prod__
+    ? process.env.CORS_ORIGIN
+    : 'http://localhost:3000',
+};
+
+// [
+//   process.env.CORS_ORIGIN,
+//   'https://lireddit-serve.herokuapp.com',
+//   'https://studio.apollographql.com',
+//   'http://localhost:3000',
+// ];
 
 const main = async () => {
   dotenv.config();
@@ -61,7 +68,7 @@ const main = async () => {
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('trust proxy', 1);
+  app.enable('trust proxy');
   app.use(
     session({
       name: COOKIE_NAME,
@@ -69,6 +76,7 @@ const main = async () => {
         client: redis,
         disableTouch: true,
       }),
+      proxy: true,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 year
         httpOnly: true,
@@ -81,12 +89,7 @@ const main = async () => {
     })
   );
 
-  app.use(
-    cors({
-      origin: corsOrigin as any,
-      credentials: true,
-    })
-  );
+  app.use(cors(corsOptions));
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
