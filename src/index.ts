@@ -61,16 +61,14 @@ const main = async () => {
   
   const app = express();
 
-  const RedisStore = connectRedis(session);
-  
   app.set('first proxy', 1);
-  
+
   app.use(
-  cors({
-    origin: 'https://liredddit.netlify.app',
-    credentials: true,
-  })
-);
+    cors({
+      origin: 'https://liredddit.netlify.app',
+      credentials: true,
+    })
+  );
   
   app.use(
     session({
@@ -119,17 +117,6 @@ const main = async () => {
 
   await apolloServer.start();
   
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://liredddit.netlify.app');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    );
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    next();
-  });
-
   apolloServer.applyMiddleware({
     app,
     cors: false,
