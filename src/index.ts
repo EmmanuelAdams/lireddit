@@ -44,9 +44,6 @@ const main = async () => {
   // await User.delete({});
   // await Updoot.delete({});
 
-  const app = express();
-
-  const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL as any, {
     password: process.env.REDIS_AUTH,
     host: process.env.REDIS_HOST,
@@ -61,6 +58,11 @@ const main = async () => {
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
+  
+  const app = express();
+
+  const RedisStore = connectRedis(session);
+  
   app.set('first proxy', 1);
   
   app.use(
@@ -116,10 +118,21 @@ const main = async () => {
   });
 
   await apolloServer.start();
+  
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://liredddit.netlify.app');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    next();
+  });
 
   apolloServer.applyMiddleware({
     app,
-    cors: true,
+    cors: false,
   });
 
   const PORT = process.env.PORT || 5000;
