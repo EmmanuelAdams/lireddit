@@ -20,27 +20,15 @@ import { createUserLoader } from './utils/createUserLoader';
 import { createUpdootLoader } from './utils/createUpdootLoader';
 import * as dotenv from 'dotenv';
 
-const corsOptions = {
-  credentials: true,
-  origin: __prod__
-    ? process.env.CORS_ORIGIN
-    : 'http://localhost:3000',
-};
-
-// const corsDomain = ['.herokuapp.com' && '.netlify.app'];
-
-// [
-//   process.env.CORS_ORIGIN,
-//   'https://lireddit-serve.herokuapp.com',
-//   'https://studio.apollographql.com',
-//   'http://localhost:3000',
-// ];
-
 const main = async () => {
   dotenv.config();
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
+    database: process.env.DATABASE,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
     ssl: {
       rejectUnauthorized: false,
     },
@@ -60,6 +48,9 @@ const main = async () => {
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL as any, {
+    password: process.env.REDIS_AUTH,
+    host: process.env.REDIS_HOST,
+    port: 6379,
     tls: {
       rejectUnauthorized: false,
     },
@@ -70,7 +61,7 @@ const main = async () => {
   redis.on('error', (err: Error) => {
     return console.log('Redis Client Error', err);
   });
-  app.set('trust proxy', 1);
+  app.set('first proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
@@ -78,21 +69,35 @@ const main = async () => {
         client: redis,
         disableTouch: true,
       }),
-      proxy: true,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 year
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: ['.herokuapp.com', '.netlify.app'] as any,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET as string,
       resave: false,
     })
   );
+  
+  app.use((req, res, next) => {
+  const allowedOrigin = 'https://liredddit.netlify.app';
+  
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization'
+  );
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  
+  return next();
+});
 
-  app.use(cors(corsOptions));
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
@@ -126,10 +131,10 @@ const main = async () => {
     cors: false,
   });
 
-  // const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5000;
 
-  app.listen(process.env.PORT, () => {
-    console.log(`server started on localhost:5000`);
+  app.listen({ port: PORT }, () => {
+    console.log(`server started on localhost:${PORT}`);
   });
 };
 
