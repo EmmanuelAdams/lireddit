@@ -62,6 +62,14 @@ const main = async () => {
     return console.log('Redis Client Error', err);
   });
   app.set('first proxy', 1);
+  
+  app.use(
+  cors({
+    origin: 'https://liredddit.netlify.app',
+    credentials: true,
+  })
+);
+  
   app.use(
     session({
       name: COOKIE_NAME,
@@ -80,21 +88,6 @@ const main = async () => {
       resave: false,
     })
   );
-  
-  app.use(function (req, res, next) {
- // const allowedOrigin = 'https://liredddit.netlify.app';
-
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
-
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
@@ -126,7 +119,7 @@ const main = async () => {
 
   apolloServer.applyMiddleware({
     app,
-    cors: false,
+    cors: true,
   });
 
   const PORT = process.env.PORT || 5000;
