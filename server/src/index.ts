@@ -22,6 +22,7 @@ import * as dotenv from 'dotenv';
 const corsOrigin = [
   'https://studio.apollographql.com',
   'http://localhost:3000',
+  'https://liredddit.netlify.app'
 ];
 
 const main = async () => {
