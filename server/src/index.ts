@@ -19,11 +19,6 @@ import { Updoot } from './entities/Updoot';
 import { createUserLoader } from './utils/createUserLoader';
 import { createUpdootLoader } from './utils/createUpdootLoader';
 import * as dotenv from 'dotenv';
-const corsOrigin = [
-  'https://studio.apollographql.com',
-  'http://localhost:3000',
-  'https://liredddit.netlify.app'
-];
 
 const main = async () => {
   dotenv.config();
@@ -85,13 +80,24 @@ const main = async () => {
       resave: false,
     })
   );
-
-  app.use(
-    cors({
-      origin: corsOrigin,
-      credentials: true,
-    })
+  
+  app.use((req, res, next) => {
+  const allowedOrigin = 'https://liredddit.netlify.app';
+  
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization'
   );
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  
+  return next();
+});
+
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
