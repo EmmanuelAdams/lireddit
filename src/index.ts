@@ -81,22 +81,20 @@ const main = async () => {
     })
   );
   
-  app.use((req, res, next) => {
+  app.use(function (req, res, next) {
   const allowedOrigin = 'https://liredddit.netlify.app';
-  
-  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization'
-  );
-  
+
+  res.header('Access-Control-Allow-Origin', allowedOrigin);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
-  
-  return next();
+
+  next();
 });
+
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
