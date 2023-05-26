@@ -82,9 +82,9 @@ const main = async () => {
   );
   
   app.use(function (req, res, next) {
-  const allowedOrigin = 'https://liredddit.netlify.app';
+ // const allowedOrigin = 'https://liredddit.netlify.app';
 
-  res.header('Access-Control-Allow-Origin', allowedOrigin);
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
